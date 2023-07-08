@@ -6,25 +6,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class PrimaryAccount {
-
+public class SavingsAccount {
     private Long id;
     private int accountNumber;
     private BigDecimal accountBalance;
-
-    private List<PrimaryTransaction> primaryTransactions;
+    private List<SavingsTransaction> savingsTransactions;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -2,8 +2,11 @@ package com.example.demo.domain;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class User {
+
     private Long userId;
     private String username;
     private String password;
@@ -12,4 +15,24 @@ public class User {
     private String email;
     private String phone;
     private boolean enabled = true;
+
+    private PrimaryAccount primaryAccount;
+    private SavingsAccount savingsAccount;
+
+    private List<Appointment> appointments;
+    private List<Recipient> recipients;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
