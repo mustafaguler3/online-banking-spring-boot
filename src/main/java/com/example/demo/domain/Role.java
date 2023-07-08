@@ -12,7 +12,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String roleName;
+    private String name;
     @OneToMany(mappedBy = "role",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Set<UserRole> userRoles = new HashSet<>();
     @ManyToOne

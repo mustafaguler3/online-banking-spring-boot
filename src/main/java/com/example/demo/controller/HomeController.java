@@ -1,6 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.domain.PrimaryAccount;
+import com.example.demo.domain.SavingsAccount;
 import com.example.demo.domain.User;
+import com.example.demo.domain.UserRole;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,11 +14,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+import java.util.HashSet;
+import java.util.Set;
+
 @Controller
 public class HomeController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @GetMapping("/")
     public String home(){
@@ -44,7 +54,10 @@ public class HomeController {
             }
             return "signup";
         }else {
-            userService.save(user);
+            Set<UserRole> userRoles = new HashSet<>();
+            userRoles.add(new UserRole(user,roleRepository.findByName("ROLE_USER")));
+
+            userService.createUser(user,userRoles);
 
             return "redirect:/";
         }
@@ -54,4 +67,27 @@ public class HomeController {
     }
 
 
+    @GetMapping("/userFront")
+    public String userFront(Principal principal,Model model){
+        User user = userService.findByUsername(principal.getName());
+        PrimaryAccount primaryAccount = user.getPrimaryAccount();
+        SavingsAccount savingsAccount = user.getSavingsAccount();
+
+        model.addAttribute("primaryAccount",primaryAccount);
+        model.addAttribute("savingsAccount",savingsAccount);
+
+        return "userFront";
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
