@@ -26,6 +26,14 @@ public class PrimaryTransaction {
     @JoinColumn(name = "primary_account_id")
     private PrimaryAccount primaryAccount;
 
+    public PrimaryTransaction(Date date, String description, String type, String status, double amount, BigDecimal accountBalance, PrimaryAccount primaryAccount) {
+        this.date = date;
+        this.description = description;
+        this.status = status;
+        this.amount = amount;
+        this.availableBalance = accountBalance;
+        this.primaryAccount = primaryAccount;
+    }
 }
 
 

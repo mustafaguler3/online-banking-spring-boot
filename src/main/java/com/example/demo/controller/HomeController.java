@@ -69,6 +69,7 @@ public class HomeController {
 
     @GetMapping("/userFront")
     public String userFront(Principal principal,Model model){
+
         User user = userService.findByUsername(principal.getName());
         PrimaryAccount primaryAccount = user.getPrimaryAccount();
         SavingsAccount savingsAccount = user.getSavingsAccount();

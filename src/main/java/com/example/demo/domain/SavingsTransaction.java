@@ -25,4 +25,13 @@ public class SavingsTransaction {
     @ManyToOne
     @JoinColumn(name = "savings_account_id")
     private SavingsAccount savingsAccount;
+
+    public SavingsTransaction(Date date, String description, String account, String status, double amount, BigDecimal accountBalance, SavingsAccount savingsAccount) {
+        this.date = date;
+        this.description = description;
+        this.status = status;
+        this.amount = amount;
+        this.availableBalance = accountBalance;
+        this.savingsAccount = savingsAccount;
+    }
 }
