@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
+import com.example.demo.domain.UserRole;
 
 import java.util.Set;
 
@@ -12,5 +13,5 @@ public interface UserService {
     boolean checkUsernameExists(String username);
     boolean checkEmailExists(String email);
     void save(User user);
-    User createUser(User user, Set<Role> roles);
+    User createUser(User user, Set<UserRole> roles);
 }
