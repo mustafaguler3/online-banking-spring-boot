@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
@@ -50,12 +51,28 @@ public class AccountController {
         return "deposit";
     }
 
-    @GetMapping("/deposit")
+    @PostMapping("/deposit")
     public String depositPost(@ModelAttribute("amount") String amount,
                               @ModelAttribute("accountType") String accountType,
                               Principal principal){
 
         accountService.deposit(accountType,Double.parseDouble(amount),principal);
+
+        return "redirect:/userFront";
+    }
+    @GetMapping("/withdraw")
+    public String withdraw(Model model){
+        model.addAttribute("accountType","");
+        model.addAttribute("amount","");
+        return "withdraw";
+    }
+
+    @PostMapping("/withdraw")
+    public String withdrawPost(@ModelAttribute("amount") String amount,
+                               @ModelAttribute("accountType") String accountType,
+                               Principal principal){
+
+        accountService.withdraw(accountType,Double.parseDouble(amount),principal);
 
         return "redirect:/userFront";
     }

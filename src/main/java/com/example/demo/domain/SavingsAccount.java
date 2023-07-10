@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @Entity
-public class SavingsAccount {
+public class SavingsAccount{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
