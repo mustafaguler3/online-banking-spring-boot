@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -23,6 +26,8 @@ public class TransactionServiceImpl implements TransactionService {
     private SavingsTransactionRepository savingsTransactionRepository;
     @Autowired
     private PrimaryTransactionRepository primaryTransactionRepository;
+    @Autowired
+    private RecipientRepository recipientRepository;
 
     @Override
     public List<PrimaryTransaction> findPrimaryTransactionList(String username) {
@@ -85,6 +90,28 @@ public class TransactionServiceImpl implements TransactionService {
 
             savingsTransactionRepository.save(savingsTransaction);
         }
+    }
+
+    @Override
+    public List<Recipient> findRecipientList(Principal principal) {
+        String username = principal.getName();
+
+        List<Recipient> recipientList = recipientRepository.findAll()
+                .stream()
+                .filter(recipient -> username.equals(recipient.getUser().getUsername()))
+                .collect(Collectors.toList());
+
+        return recipientList;
+    }
+
+    @Override
+    public Recipient saveRecipient(Recipient recipient) {
+        return recipientRepository.save(recipient);
+    }
+
+    @Override
+    public Recipient findRecipientByName(String name) {
+        return recipientRepository.findByName(name);
     }
 }
 

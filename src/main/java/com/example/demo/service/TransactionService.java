@@ -1,10 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.PrimaryAccount;
-import com.example.demo.domain.PrimaryTransaction;
-import com.example.demo.domain.SavingsAccount;
-import com.example.demo.domain.SavingsTransaction;
+import com.example.demo.domain.*;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface TransactionService {
@@ -20,6 +18,9 @@ public interface TransactionService {
 
     void betweenAccountsTransfer(String from, String to, String amount, PrimaryAccount primaryAccount, SavingsAccount savingsAccount);
 
+    List<Recipient> findRecipientList(Principal principal);
+    Recipient saveRecipient(Recipient recipient);
+    Recipient findRecipientByName(String name);
 }
 
 
