@@ -1,96 +1,86 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.PrimaryAccount;
-import com.example.demo.domain.SavingsAccount;
-import com.example.demo.domain.User;
+import java.security.Principal;
+import java.util.List;
+
+import com.example.demo.domain.*;
 import com.example.demo.service.AccountService;
+import com.example.demo.service.TransactionService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/account")
 public class AccountController {
-
-    @Autowired
+	
+	@Autowired
     private UserService userService;
-    @Autowired
-    private AccountService accountService;
+	
+	@Autowired
+	private AccountService accountService;
+	
+	@Autowired
+	private TransactionService transactionService;
+	
+	@RequestMapping("/primaryAccount")
+	public String primaryAccount(Model model, Principal principal) {
 
-    @GetMapping("/primaryAccount")
-    public String primaryAccount(Model model, Principal principal){
-        User user = userService.findByUsername(principal.getName());
+		List<PrimaryTransaction> primaryTransactionList = transactionService.findPrimaryTransactionList(principal.getName());
+		
+		User user = userService.findByUsername(principal.getName());
         PrimaryAccount primaryAccount = user.getPrimaryAccount();
 
-        model.addAttribute("primaryAccount",primaryAccount);
+        model.addAttribute("primaryAccount", primaryAccount);
+        model.addAttribute("primaryTransactionList", primaryTransactionList);
+		
+		return "primaryAccount";
+	}
 
-        return "primaryAccount";
-    }
-
-    @GetMapping("/savingsAccount")
-    public String savingsAccount(Model model, Principal principal){
+	@RequestMapping("/savingsAccount")
+    public String savingsAccount(Model model, Principal principal) {
+		List<SavingsTransaction> savingsTransactionList = transactionService.findSavingsTransactionList(principal.getName());
         User user = userService.findByUsername(principal.getName());
         SavingsAccount savingsAccount = user.getSavingsAccount();
 
-        model.addAttribute("savingsAccount",savingsAccount);
+        model.addAttribute("savingsAccount", savingsAccount);
+        model.addAttribute("savingsTransactionList", savingsTransactionList);
+
         return "savingsAccount";
     }
-
-    @GetMapping("/deposit")
-    public String deposit(Model model,Principal principal){
-        model.addAttribute("accountType","");
-        model.addAttribute("amount","");
+	
+	@RequestMapping(value = "/deposit", method = RequestMethod.GET)
+    public String deposit(Model model) {
+        model.addAttribute("accountType", "");
+        model.addAttribute("amount", "");
 
         return "deposit";
     }
 
-    @PostMapping("/deposit")
-    public String depositPost(@ModelAttribute("amount") String amount,
-                              @ModelAttribute("accountType") String accountType,
-                              Principal principal){
-
-        accountService.deposit(accountType,Double.parseDouble(amount),principal);
+    @RequestMapping(value = "/deposit", method = RequestMethod.POST)
+    public String depositPOST(@ModelAttribute("amount") String amount, @ModelAttribute("accountType") String accountType, Principal principal) {
+        accountService.deposit(accountType, Double.parseDouble(amount), principal);
 
         return "redirect:/userFront";
     }
-    @GetMapping("/withdraw")
-    public String withdraw(Model model){
-        model.addAttribute("accountType","");
-        model.addAttribute("amount","");
+    
+    @RequestMapping(value = "/withdraw", method = RequestMethod.GET)
+    public String withdraw(Model model) {
+        model.addAttribute("accountType", "");
+        model.addAttribute("amount", "");
+
         return "withdraw";
     }
 
-    @PostMapping("/withdraw")
-    public String withdrawPost(@ModelAttribute("amount") String amount,
-                               @ModelAttribute("accountType") String accountType,
-                               Principal principal){
-
-        accountService.withdraw(accountType,Double.parseDouble(amount),principal);
+    @RequestMapping(value = "/withdraw", method = RequestMethod.POST)
+    public String withdrawPOST(@ModelAttribute("amount") String amount, @ModelAttribute("accountType") String accountType, Principal principal) {
+        accountService.withdraw(accountType, Double.parseDouble(amount), principal);
 
         return "redirect:/userFront";
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

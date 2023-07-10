@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.domain.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.AccountService;
+import com.example.demo.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +23,7 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private PrimaryTransactionRepository primaryTransactionRepository;
-    @Autowired
-    private SavingsTransactionRepository savingsTransactionRepository;
+    private TransactionService transactionService;
 
     @Override
     public PrimaryAccount createPrimaryAccount() {
@@ -58,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
             Date date = new Date();
 
             PrimaryTransaction primaryTransaction = new PrimaryTransaction(date,"Deposit to Primary Account","Account","Finished",amount,primaryAccount.getAccountBalance(),primaryAccount);
-            primaryTransactionRepository.savePrimaryDepositTransaction(primaryTransaction);
+            transactionService.savePrimaryDepositTransaction(primaryTransaction);
 
         }else if(accountType.equalsIgnoreCase("Savings")){
             SavingsAccount savingsAccount = user.getSavingsAccount();
@@ -67,7 +66,7 @@ public class AccountServiceImpl implements AccountService {
 
             Date date = new Date();
             SavingsTransaction savingsTransaction = new SavingsTransaction(date,"Deposit to savings account","Account","Finished",amount,savingsAccount.getAccountBalance(),savingsAccount);
-            savingsTransactionRepository.saveSavingsDepositTransaction(savingsTransaction);
+            transactionService.saveSavingsDepositTransaction(savingsTransaction);
         }
     }
 
@@ -83,6 +82,9 @@ public class AccountServiceImpl implements AccountService {
 
             Date date = new Date();
             PrimaryTransaction primaryTransaction = new PrimaryTransaction(date,"withraw from primary account","Account","Finished",amount,primaryAccount.getAccountBalance(),primaryAccount);
+
+            transactionService.savePrimaryWithdrawTransaction(primaryTransaction);
+
         }else if (accountType.equalsIgnoreCase("Savings")){
             SavingsAccount savingsAccount = user.getSavingsAccount();
             savingsAccount.setAccountNumber(accountGenerator());
@@ -92,6 +94,8 @@ public class AccountServiceImpl implements AccountService {
 
             Date date = new Date();
             SavingsTransaction savingsTransaction = new SavingsTransaction(date,"withdraw savings account","Savings Account","Finished",amount,savingsAccount.getAccountBalance(),savingsAccount);
+
+            transactionService.saveSavingsWithdrawTransaction(savingsTransaction);
         }
     }
 

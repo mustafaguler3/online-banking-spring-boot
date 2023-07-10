@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.domain.User;
-import com.example.demo.domain.UserRole;
+import com.example.demo.domain.security.UserRole;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AccountService;
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
             for (UserRole role : roles){
                 roleRepository.save(role.getRole());
             }
-            user.getRoles().addAll(roles);
+            user.getUserRoles().addAll(roles);
             user.setPrimaryAccount(accountService.createPrimaryAccount());
             user.setSavingsAccount(accountService.createSavingsAccount());
 

@@ -1,8 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
-import com.example.demo.domain.UserRole;
+import com.example.demo.domain.security.UserRole;
 
 import java.util.Set;
 
