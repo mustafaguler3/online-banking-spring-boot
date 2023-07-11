@@ -4,7 +4,7 @@ import com.example.demo.domain.Appointment;
 
 import java.util.List;
 
-public interface AppoinmentService {
+public interface AppointmentService {
     Appointment createAppoinment(Appointment appointment);
     List<Appointment> findAll();
     Appointment findAppointmentById(int id);
