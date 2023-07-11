@@ -110,8 +110,34 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public Recipient deleteRecipientByName(String name) {
+        return recipientRepository.deleteByName(name);
+    }
+
+    @Override
     public Recipient findRecipientByName(String name) {
         return recipientRepository.findByName(name);
+    }
+
+    @Override
+    public void toSomeoneElseTransfer(Recipient recipient, String accountType, String amount, PrimaryAccount primaryAccount, SavingsAccount savingsAccount) {
+        if (accountType.equalsIgnoreCase("Primary")){
+            primaryAccount.setAccountBalance(primaryAccount.getAccountBalance().subtract(new BigDecimal(amount)));
+            primaryAccountRepository.save(primaryAccount);
+
+            Date date = new Date();
+            PrimaryTransaction primaryTransaction = new PrimaryTransaction(date,"Transfer to recipient"+recipient.getName(),"Transfer","Finished",Double.parseDouble(amount),primaryAccount.getAccountBalance(),primaryAccount);
+
+            primaryTransactionRepository.save(primaryTransaction);
+
+        }else if (accountType.equalsIgnoreCase("Savings")){
+            savingsAccount.setAccountBalance(savingsAccount.getAccountBalance().subtract(new BigDecimal(amount)));
+            savingsAccountRepository.save(savingsAccount);
+            Date date = new Date();
+            SavingsTransaction savingsTransaction = new SavingsTransaction(date,"Transfer to recipient"+recipient.getName(),"Transfer","Finished",Double.parseDouble(amount),savingsAccount.getAccountBalance(),savingsAccount);
+
+            savingsTransactionRepository.save(savingsTransaction);
+        }
     }
 }
 
