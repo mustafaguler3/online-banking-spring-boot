@@ -19,6 +19,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
+@RequestMapping("/transfer")
 public class TransferController {
 
     @Autowired
@@ -60,7 +61,7 @@ public class TransferController {
         return "recipient";
     }
 
-    @RequestMapping("/recipient")
+    @RequestMapping(value = "/recipient",method = RequestMethod.POST)
     public String recipientPost(@ModelAttribute("recipient") Recipient recipient,
                                 Principal principal){
         User user = userService.findByUsername(principal.getName());
@@ -107,7 +108,7 @@ public class TransferController {
         return "toSomeoneElse";
     }
 
-    @RequestMapping("/toSomeoneElse")
+    @RequestMapping(value = "/toSomeoneElse",method = RequestMethod.POST)
     public String toSomeoneElsePost(@ModelAttribute("recipientName") String recipientName,
                                     @ModelAttribute("amount") String amount,
                                     @ModelAttribute("accountType") String accountType,

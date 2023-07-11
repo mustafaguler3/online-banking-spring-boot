@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Controller
+@RequestMapping("/appointment")
 public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
